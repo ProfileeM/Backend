@@ -2,7 +2,7 @@ name: CD  # 워크플로의 이름
 
 # 워크플로 시작 조건
 on:
-  merge:
+  push:
     branches: [ main ]
 
 env:
