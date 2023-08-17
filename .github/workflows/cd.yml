@@ -1,8 +1,8 @@
-name: CI/CD  # 워크플로의 이름
+name: CD  # 워크플로의 이름
 
 # 워크플로 시작 조건
 on:
-  pull_request:
+  merge:
     branches: [ main ]
 
 env:
@@ -10,7 +10,7 @@ env:
 
 
 jobs:
-  build:
+  build and deploy:
     runs-on: ubuntu-latest
 
     steps:
