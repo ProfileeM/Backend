@@ -26,6 +26,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'com.google.code.gson:gson:2.8.7'
 
+	// QR코드 생성 라이브러리 의존성 추가
+	implementation 'com.google.zxing:core:3.4.1'
+	implementation 'com.google.zxing:javase:3.4.1'
+
 	compileOnly 'org.projectlombok:lombok'
 
 	runtimeOnly 'com.mysql:mysql-connector-j'     // db 연결
