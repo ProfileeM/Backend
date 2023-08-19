@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 //엔티티 생성후 확인
+@Setter //setter 메소드 생성
 @Getter //getter 메소드 생성
 @Builder
 @AllArgsConstructor
@@ -33,7 +34,7 @@ public class Card {
     @Column(name="residence")
     private String residence; //residence
 
-    @Column(name="QR_url")
+    @Column(name="QR_url", length = 1000)   // 길이 수정
     private String qr; //QR_url
 
     @Column(name="profile")
@@ -52,7 +53,7 @@ public class Card {
     private String drink;
 
     @Column(name="bad_food")
-    private String badfood;
+    private String bad_food;
 
     @Column(name="birth")
     private String birth;
@@ -62,7 +63,7 @@ public class Card {
     public Card(String nickname, String university, String major, String residence,
                 String qr, String template, String profile,
                 Long gid, Long uid,
-                String mbti, String drink, String music, String badfood, String birth) {
+                String mbti, String drink, String music, String bad_food, String birth) {
         this.nickname = nickname;
         this.university = university;
         this.major = major;
@@ -76,7 +77,7 @@ public class Card {
         this.gid = gid;
 
         this.mbti = mbti;
-        this.badfood = badfood;
+        this.bad_food = bad_food;
         this.music=music;
         this.birth=birth;
         this.drink=drink;

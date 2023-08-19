@@ -2,13 +2,17 @@ package com.example.profileem.controller;
 
 import com.example.profileem.domain.Card;
 import com.example.profileem.repository.CardRepository;
+import com.example.profileem.service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.ByteArrayOutputStream;
+import java.util.*;
 
 @RestController
 @RequestMapping("/card")
@@ -20,12 +24,16 @@ public class CardController {
     public CardController(CardRepository cardRepository) {
         this.cardRepository = cardRepository;
     }
+    @Autowired
+    private CardService cardService; // Card 관련 서비스 클래스를 주입받음
 
-    @PostMapping("/") //my 카드 등록
+
+    @PostMapping("/") //my 카드 등록 // qr생성 후 저장하는 로직 추가
     public ResponseEntity<Card> createCard(@RequestBody Card card) {
-        Card savedCard = cardRepository.save(card);
+        Card savedCard = cardService.createCard(card);
         return new ResponseEntity<>(savedCard, HttpStatus.CREATED);
     }
+
 
     //특정 카드 조회
     @GetMapping("/{id}") // my 카드 중 특정 카드 조회
@@ -56,5 +64,27 @@ public class CardController {
     public ResponseEntity<String> deleteAllCards() {
         cardRepository.deleteAll();
         return new ResponseEntity<>("All cards have been deleted.", HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/qrimage") // my 카드 중 특정 카드 qr코드 조회
+    public ResponseEntity<byte[]> getCardImageById(@PathVariable Long id) {
+        BufferedImage qrImage = cardService.getCardImageById(id);
+
+        if (qrImage == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(qrImage, "PNG", baos);
+            byte[] imageBytes = baos.toByteArray();
+
+            return ResponseEntity
+                    .ok()
+                    .contentType(org.springframework.http.MediaType.IMAGE_PNG)
+                    .body(imageBytes);
+        } catch (IOException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
