@@ -15,7 +15,9 @@ public class KakaoController {
     public final KakaoService kakaoService;
 
     @GetMapping("/kakao")
-    public void kakaoLogin(@RequestHeader(value = "AccessToken") String accessToken) {
-        kakaoService.createKakaoUser(accessToken);
+    public Long kakaoLogin(@RequestHeader(value = "AccessToken") String accessToken) {
+        Long userId = kakaoService.createKakaoUser(accessToken);
+
+        return userId;
     }
 }

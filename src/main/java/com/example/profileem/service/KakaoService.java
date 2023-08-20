@@ -17,17 +17,18 @@ import java.net.URL;
 import java.util.HashMap;
 
 @RequiredArgsConstructor
-@Slf4j
+@Slf4j // 로그 확인
 @Service
 public class KakaoService {
 
     final public UserRepository userRepository;
 
-    public void createKakaoUser(String accessToken) {
-
-        HashMap<String, Object> userInfo = new HashMap<>();
+    // 카카오 로그인
+    public Long createKakaoUser(String accessToken) {
 
         String postURL = "https://kapi.kakao.com/v2/user/me"; // 이 주소에 access_token 보내면 사용자 정보 받아올 수 있음
+
+        Long id = null; // 사용자 id
 
         try {
             URL url = new URL(postURL);
@@ -51,18 +52,24 @@ public class KakaoService {
             JsonElement element = JsonParser.parseString(result.toString());
             JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
 
-            Long id = element.getAsJsonObject().get("id").getAsLong();
+            id = element.getAsJsonObject().get("id").getAsLong();
             String name = properties.getAsJsonObject().get("nickname").getAsString();
 
-            userInfo.put("name", name);
-            log.info("saveName : " + name); // 저장하는 회원 이름
-            log.info("saveId : " + id); // 저장하는 회원 id
+            log.info("saveName : " + name); // 저장하는 회원 이름 출력
+            log.info("saveId : " + id); // 저장하는 회원 id 출력
 
-            User newUser = new User(id, name);
-            userRepository.save(newUser);
+            if (userRepository.findByUserId(id) == null) {
+                User newUser = User.builder()
+                        .userId(id)
+                        .name(name)
+                        .build();
+
+                userRepository.save(newUser);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return id;
     }
 }
