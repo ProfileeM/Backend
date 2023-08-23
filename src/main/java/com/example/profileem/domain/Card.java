@@ -19,8 +19,8 @@ public class Card {
     @Column(name="user_id") //카카오로그인에서 user_id 받아오기
     private Long uid; //user_id => 외래 키로 나중에 설정 수정 (user 테이블)
 
-    @Column(name="group_id")
-    private Long gid; //group_id => 외래 키로 나중에 설정 수정 (group 테이블)
+    @Column(name="wallet_id")
+    private Long wid; //wallet_id => 외래 키로 나중에 설정 수정 (wallet 테이블)
 
     @Column(name="nickname") //unique=true : 이 속성은 해당 컬럼의 값들이 유일해야한다.
     private String nickname; //nickname
@@ -62,7 +62,7 @@ public class Card {
     }
     public Card(String nickname, String university, String major, String residence,
                 String qr, String template, String profile,
-                Long gid, Long uid,
+                Long wid, Long uid,
                 String mbti, String drink, String music, String bad_food, String birth) {
         this.nickname = nickname;
         this.university = university;
@@ -74,7 +74,7 @@ public class Card {
         this.template = template;
 
         this.uid = uid;
-        this.gid = gid;
+        this.wid = wid;
 
         this.mbti = mbti;
         this.bad_food = bad_food;
