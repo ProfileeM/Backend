@@ -45,7 +45,7 @@ jobs:
 
       # yml파일 복사(동적인 설정정보 확인 때문에)
       - name: Copy application.yml from Submodule
-        run: cp path/to/submodule-data/application.yml ./deploy
+        run: cp submodule-data/application.yml ./deploy
 
       # Jar 파일 복사
       - name: Copy Jar
