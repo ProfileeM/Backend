@@ -1,0 +1,3 @@
+[submodule "submodule-data"]
+    path = submodule-data
+    url = git@github.com:ProfileeM/submodule-data.git

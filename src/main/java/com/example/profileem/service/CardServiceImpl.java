@@ -76,7 +76,7 @@ public class CardServiceImpl implements CardService{
     }
 
     @Override
-    public BufferedImage getCardImageById(Long id) {
+    public BufferedImage getQRImageById(Long id) {
         Card card = cardRepository.findById(id).orElse(null);
         if (card == null || card.getQr() == null) {
             return null; // 카드가 없거나 QR 코드가 없으면 null 반환
