@@ -5,6 +5,10 @@ on:
   pull_request:
     branches: [ main ]
 
+env:
+  SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
+  S3_BUCKET_NAME: profileem-backend
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -34,6 +38,3 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean build
 
-env:
-  SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
-  S3_BUCKET_NAME: profileem-backend

@@ -5,6 +5,10 @@ on:
   push:
     branches: [ main ]
 
+env:
+  SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
+  S3_BUCKET_NAME: profileem-backend
+
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
@@ -81,6 +85,3 @@ jobs:
           --s3-location bucket=profileem-backend,bundleType=zip,key=profileem.zip
           --region ap-northeast-2
 
-env:
-  SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
-  S3_BUCKET_NAME: profileem-backend
