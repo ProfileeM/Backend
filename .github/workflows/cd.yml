@@ -24,20 +24,20 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      # submodule에 있는 파일 최신으로 업데이트
+      - name: Update Submodule
+        run: git submodule update --init --recursive
+
       - name: Build with Gradle
         run: ./gradlew clean build
-
-      #        # 현재시간 가져오기
-      #      - name: Get current time
-      #        uses: josStorer/get-current-time@v2.0.2
-      #        id: current-time
-      #        with:
-      #          format: YYYY-MM-DDTHH-mm-ss
-      #          utcOffset: "+09:00"
 
       # 디렉토리 생성
       - name: Make Directory
         run: mkdir -p deploy
+
+      # yml파일 복사(동적인 설정정보 확인 때문에)
+      - name: Copy application.yml from Submodule
+        run: cp path/to/submodule-data/application.yml ./deploy
 
       # Jar 파일 복사
       - name: Copy Jar

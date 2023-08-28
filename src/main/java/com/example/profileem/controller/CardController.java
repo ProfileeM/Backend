@@ -34,7 +34,6 @@ public class CardController {
         return new ResponseEntity<>(savedCard, HttpStatus.CREATED);
     }
 
-
     //특정 카드 조회
     @GetMapping("/{id}") // my 카드 중 특정 카드 조회
     public ResponseEntity<Card> getCardById(@PathVariable Long id) { //id : cardId
@@ -67,8 +66,8 @@ public class CardController {
     }
 
     @GetMapping("/{id}/qrimage") // my 카드 중 특정 카드 qr코드 조회
-    public ResponseEntity<byte[]> getCardImageById(@PathVariable Long id) {
-        BufferedImage qrImage = cardService.getCardImageById(id);
+    public ResponseEntity<byte[]> getQRImageById(@PathVariable Long id) {
+        BufferedImage qrImage = cardService.getQRImageById(id);
 
         if (qrImage == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
