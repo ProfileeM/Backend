@@ -35,7 +35,7 @@ public class KakaoService {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
             conn.setRequestMethod("POST");
-            conn.setRequestProperty("Authorization", "Bearer " + accessToken);
+            conn.setRequestProperty("Authorization", "Bearer " + accessToken); //카카오 로그인 엑세스 토큰 설정
 
             int responseCode = conn.getResponseCode();
             log.info("responseCode : " + responseCode);

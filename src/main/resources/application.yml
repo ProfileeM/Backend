@@ -1,6 +1,5 @@
 spring:
   datasource:
-
   jpa:
     show-sql: true    # sql 쿼리 출력
     properties:
