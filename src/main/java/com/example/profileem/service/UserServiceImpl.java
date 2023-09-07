@@ -6,7 +6,9 @@ import com.example.profileem.repository.PartyRepository;
 import com.example.profileem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,14 +65,17 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<Party> getUserParties(Long userId) {
+    @Transactional(readOnly = true)
+    public List<Long> getUserPartyIds(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        // 사용자가 속한 파티 목록 조회
-        List<Party> userParties = partyRepository.findByMembersContains(user);
+        List<Long> userPartyIds = new ArrayList<>();
+        for (Party party : user.getParties()) {
+            userPartyIds.add(party.getPartyId());
+        }
 
-        return userParties;
+        return userPartyIds;
     }
 
 }

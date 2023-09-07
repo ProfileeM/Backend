@@ -60,10 +60,10 @@ public class UserController {
 
     // 사용자가 속한 파티 목록 조회
     @GetMapping("/{userId}/parties")
-    public ResponseEntity<List<Party>> getUserParties(@PathVariable("userId") Long userId) {
+    public ResponseEntity<List<Long>> getUserPartyIds(@PathVariable("userId") Long userId) {
         try {
-            List<Party> userParties = userService.getUserParties(userId);
-            return ResponseEntity.ok(userParties);
+            List<Long> userPartyIds = userService.getUserPartyIds(userId);
+            return ResponseEntity.ok(userPartyIds);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }

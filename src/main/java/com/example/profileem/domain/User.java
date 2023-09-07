@@ -31,6 +31,10 @@ public class User {
     @Column(name = "card_id")
     private List<Long> receivedCardIds = new ArrayList<>();
 
+    // 모임이랑 다대다 관계
+    @ManyToMany(mappedBy = "members")
+    private List<Party> parties;
+
     @Builder
     public User(Long userId, String name) {
         this.userId = userId;
