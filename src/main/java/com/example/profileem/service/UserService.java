@@ -10,5 +10,5 @@ public interface UserService {
 
     void deleteReceivedCard(Long userId, Long cardId);
 
-    List<Party> getUserParties(Long userId);
+    List<Long> getUserPartyIds(Long userId);
 }
