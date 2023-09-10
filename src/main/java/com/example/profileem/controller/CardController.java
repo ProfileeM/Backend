@@ -2,7 +2,6 @@ package com.example.profileem.controller;
 
 import com.example.profileem.domain.Card;
 import com.example.profileem.repository.CardRepository;
-import com.example.profileem.service.KakaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +21,10 @@ public class CardController {
         this.cardRepository = cardRepository;
     }
 
-    @PostMapping("/") //내 프로필 카드 등록 -- 수정해야 될 내용 : 등록할 때 카카오 로그인 userid를 Card의 userid로 넘겨줘야함
+    @PostMapping("/") // 내 프로필 카드 등록 -- 수정해야 될 내용 : 등록할 때 카카오 로그인 userid를 Card의 userid로 넘겨줘야함
     public ResponseEntity<Card> createCard(@RequestBody Card card) {
 
-
-
-        //나머지 카드 정보 설정하고 저장
+        // 나머지 카드 정보 설정하고 저장
         Card savedCard = cardRepository.save(card);
         return new ResponseEntity<>(savedCard, HttpStatus.CREATED);
     }
@@ -43,6 +40,7 @@ public class CardController {
             @PathVariable Long userId,
             @PathVariable Long cardId) {
         Optional<Card> card = cardRepository.findByUserUserIdAndCid(userId, cardId);
+
         return card.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
@@ -59,5 +57,4 @@ public class CardController {
             return new ResponseEntity<>("Card not found.", HttpStatus.NOT_FOUND);
         }
     }
-
 }

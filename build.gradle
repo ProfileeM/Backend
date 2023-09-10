@@ -47,3 +47,12 @@ tasks.named('test') {
 jar {
 	enabled = false     //  plain 아카이브 생성 안함
 }
+
+// yml 파일 submodule에서 가져오기
+task copyPrivate(type: Copy) {
+	copy {
+		from './submodule-data'
+		include "*.yml"
+		into 'src/main/resources'
+	}
+}
