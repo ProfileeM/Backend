@@ -17,9 +17,10 @@ import java.util.List;
 public class User {
 
     @Id
+    @Column(name="user_id")
     private Long userId;
 
-    @Column(nullable = false)
+    @Column(name="name", nullable = false)
     private String name;
 
     // 유저에 저장
