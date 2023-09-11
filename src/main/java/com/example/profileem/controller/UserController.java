@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -46,7 +47,7 @@ public class UserController {
     }
 
     // 사용자가 받은 개인 프로필 카드 삭제
-    @DeleteMapping("/{user_id}/{card_id}")
+    @DeleteMapping("/{user_id}/card/{card_id}")
     public ResponseEntity<String> deleteReceivedCard(
             @PathVariable("user_id") Long userId,
             @PathVariable("card_id") Long cardId) {
@@ -66,6 +67,19 @@ public class UserController {
             return ResponseEntity.ok(userPartyIds);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    // 파티에서 탈퇴
+    @DeleteMapping("/{userId}/party/{partyId}") // 내 그룹에서 파티 삭제
+    public ResponseEntity<String> deletePartyInUserGroup(
+            @PathVariable("userId") Long userId,
+            @PathVariable("partyId") Long partyId ) {
+        try {
+            userService.deletePartyInUserGroup(userId, partyId);
+            return ResponseEntity.ok("Party deleted successfully");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User or party not found");
         }
     }
 }

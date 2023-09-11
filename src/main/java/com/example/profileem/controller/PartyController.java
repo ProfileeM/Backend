@@ -26,9 +26,10 @@ public class PartyController {
     public ResponseEntity<Party> createParty(
             @RequestParam("party_name") String partyName,
             @RequestParam("party_leader_id") Long partyLeaderId) {
+
         try {
             Party party = partyService.createParty(partyName, partyLeaderId);
-            return ResponseEntity.ok(party);
+            return new ResponseEntity<>(party, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
@@ -48,8 +49,6 @@ public class PartyController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-
-    // 파티 탈퇴
 
 
     // 파티에 카드 등록

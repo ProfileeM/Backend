@@ -11,7 +11,5 @@ import java.util.List;
 
 @Repository
 public interface PartyRepository extends JpaRepository<Party, Long> {
-    @Query("SELECT p FROM Party p JOIN p.members m WHERE m.userId = :userId")
-    List<Party> findPartiesWhereUserIsMember(@Param("userId") Long userId);
 
 }
