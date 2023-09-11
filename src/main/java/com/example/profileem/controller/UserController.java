@@ -22,10 +22,10 @@ public class UserController {
     }
 
     // 사용자가 받은 개인 프로필 카드 ID 추가
-    @PostMapping("/{user_id}/card")
+    @PostMapping("/{card_id}/card")
     public ResponseEntity<String> addReceivedCardId(
-            @PathVariable("user_id") Long userId,
-            @RequestParam("card_id") Long cardId) {
+            @RequestParam("user_id") Long userId,
+            @PathVariable("card_id") Long cardId) {
         try {
             userService.addReceivedCardId(userId, cardId);
             return ResponseEntity.ok("Card added to user's received cards");
