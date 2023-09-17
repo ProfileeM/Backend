@@ -21,7 +21,7 @@ public class CardController {
         this.cardRepository = cardRepository;
     }
 
-    @PostMapping("/") // 내 프로필 카드 등록 -- 수정해야 될 내용 : 등록할 때 카카오 로그인 userid를 Card의 userid로 넘겨줘야함
+    @PostMapping("/") // 내 프로필 카드 등록
     public ResponseEntity<Card> createCard(@RequestBody Card card) {
 
         // 나머지 카드 정보 설정하고 저장
@@ -35,7 +35,7 @@ public class CardController {
         return new ResponseEntity<>(cards, HttpStatus.OK);
     }
 
-    @GetMapping("/card/{userId}/{cardId}") // 내 프로필 카드 특정 조회
+    @GetMapping("/{userId}/{cardId}") // 내 프로필 카드 특정 조회
     public ResponseEntity<Card> getCardByUserIdAndCardId(
             @PathVariable Long userId,
             @PathVariable Long cardId) {
@@ -56,5 +56,47 @@ public class CardController {
         } else {
             return new ResponseEntity<>("Card not found.", HttpStatus.NOT_FOUND);
         }
+    }
+
+
+    @PutMapping("/{userId}/{cardId}") // 내 프로필 카드 수정
+    public ResponseEntity<String> updateCardByUserIdAndCardId(
+            @PathVariable Long userId, @PathVariable Long cardId,
+            @RequestBody Card updatedCard) {
+        Optional<Card> optionalCard = cardRepository.findByUserUserIdAndCid(userId, cardId);
+        if (optionalCard.isPresent()) {
+            Card card = optionalCard.get();
+
+            if (updatedCard.getNickname() != null) card.setNickname(updatedCard.getNickname());
+
+            if (updatedCard.getUniversity() != null) card.setUniversity(updatedCard.getUniversity());
+
+            if (updatedCard.getMajor() != null) card.setMajor(updatedCard.getMajor());
+
+            if (updatedCard.getResidence() != null) card.setResidence(updatedCard.getResidence());
+
+            if (updatedCard.getQr() != null) card.setQr(updatedCard.getQr());
+
+            if (updatedCard.getProfile() != null) card.setProfile(updatedCard.getProfile());
+
+            if (updatedCard.getTemplate() != null) card.setTemplate(updatedCard.getTemplate());
+
+            if (updatedCard.getMbti() != null) card.setMbti(updatedCard.getMbti());
+
+            if (updatedCard.getMusic() != null) card.setMusic(updatedCard.getMusic());
+
+            if (updatedCard.getDrink() != null) card.setDrink(updatedCard.getDrink());
+
+            if (updatedCard.getBad_food() != null) card.setBad_food(updatedCard.getBad_food());
+
+            if (updatedCard.getBirth() != null) card.setBirth(updatedCard.getBirth());
+
+            cardRepository.save(card); // 수정한 카드 정보 저장
+
+            return new ResponseEntity<>("Card has been updated.", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Card not found.", HttpStatus.NOT_FOUND);
+        }
+
     }
 }
