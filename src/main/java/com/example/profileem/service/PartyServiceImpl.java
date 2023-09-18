@@ -29,20 +29,18 @@ public class PartyServiceImpl implements PartyService {
 
     @Override
     @Transactional
-    public Party createParty(String partyName, Long partyLeaderId) {
-        User partyLeader = userRepository.findById(partyLeaderId)
-                .orElseThrow(() -> new IllegalArgumentException("Party leader not found"));
+    public Party createParty(Party party) {
 
-        Party party = Party.builder()
-                .partyName(partyName)
-                .partyLeaderId(partyLeaderId)
+        Party newParty = Party.builder()
+                .partyName(party.getPartyName())
+                .partyLeaderId(party.getPartyLeaderId())
                 .build();
 
-        partyRepository.save(party);
+        partyRepository.save(newParty);
         // 사용자를 추가
-        inviteUserToParty(party.getPartyId(), partyLeaderId);
+        inviteUserToParty(newParty.getPartyId(), party.getPartyLeaderId());
 
-        return partyRepository.save(party);
+        return partyRepository.save(newParty);
     }
 
     @Override
