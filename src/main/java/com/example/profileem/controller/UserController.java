@@ -23,7 +23,7 @@ public class UserController {
     }
 
     // 사용자가 받은 개인 프로필 카드 ID 추가
-    @PostMapping("/{card_id}/card")
+    @PostMapping("/card/{card_id}")
     public ResponseEntity<String> addReceivedCardId(
             @RequestParam("user_id") Long userId,
             @PathVariable("card_id") Long cardId) {
@@ -36,8 +36,8 @@ public class UserController {
     }
 
     // 사용자가 받은 개인 프로필 카드 ID 목록 조희
-    @GetMapping("/{user_id}/cards")
-    public ResponseEntity<List<Long>> getReceivedCardIds(@PathVariable("user_id") Long userId) {
+    @GetMapping("/cards")
+    public ResponseEntity<List<Long>> getReceivedCardIds(@RequestParam("user_id") Long userId) {
         try {
             List<Long> receivedCardIds = userService.getReceivedCardIds(userId);
             return ResponseEntity.ok(receivedCardIds);
@@ -47,9 +47,9 @@ public class UserController {
     }
 
     // 사용자가 받은 개인 프로필 카드 삭제
-    @DeleteMapping("/{user_id}/card/{card_id}")
+    @DeleteMapping("/card/{card_id}")
     public ResponseEntity<String> deleteReceivedCard(
-            @PathVariable("user_id") Long userId,
+            @RequestParam("user_id") Long userId,
             @PathVariable("card_id") Long cardId) {
         try {
             userService.deleteReceivedCard(userId, cardId);
@@ -60,8 +60,8 @@ public class UserController {
     }
 
     // 사용자가 속한 파티 목록 조회
-    @GetMapping("/{userId}/parties")
-    public ResponseEntity<List<Long>> getUserPartyIds(@PathVariable("userId") Long userId) {
+    @GetMapping("/parties")
+    public ResponseEntity<List<Long>> getUserPartyIds(@RequestParam("user_id") Long userId) {
         try {
             List<Long> userPartyIds = userService.getUserPartyIds(userId);
             return ResponseEntity.ok(userPartyIds);
@@ -71,10 +71,10 @@ public class UserController {
     }
 
     // 파티에서 탈퇴
-    @DeleteMapping("/{userId}/party/{partyId}") // 내 그룹에서 파티 삭제
+    @DeleteMapping("/party/{party_id}") // 내 그룹에서 파티 삭제
     public ResponseEntity<String> deletePartyInUserGroup(
-            @PathVariable("userId") Long userId,
-            @PathVariable("partyId") Long partyId ) {
+            @RequestParam("user_id") Long userId,
+            @PathVariable("party_id") Long partyId ) {
         try {
             userService.deletePartyInUserGroup(userId, partyId);
             return ResponseEntity.ok("Party deleted successfully");
