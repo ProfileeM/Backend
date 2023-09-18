@@ -34,10 +34,11 @@ public class CardServiceImpl implements CardService{
     public Card createCard(Card card) {
         // 카드 생성 및 qr 생성 로직
 
-        // 임시 링크(모임 기능 활성화되면 제대로) //
-        String testUrl = "https://www.notion.so/9224ddcd12fe429b8c1023289edfeaa8";
+        // 앱 실행하게 하는 건 프론트 조금 나오면 추가
+        Long card_id = card.getCid();
+        String Url = "http://52.78.201.205:8080/user/" + card_id + "/card";
 
-        String qrCodeBase64 = generateQRCodeBase64(testUrl);
+        String qrCodeBase64 = generateQRCodeBase64(Url);
         card.setQr(qrCodeBase64);
 
         return cardRepository.save(card);

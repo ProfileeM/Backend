@@ -8,6 +8,7 @@ import com.example.profileem.repository.PartyRepository;
 import com.example.profileem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -27,23 +28,23 @@ public class PartyServiceImpl implements PartyService {
     }
 
     @Override
-    public Party createParty(String partyName, Long partyLeaderId) {
-        User partyLeader = userRepository.findById(partyLeaderId)
-                .orElseThrow(() -> new IllegalArgumentException("Party leader not found"));
+    @Transactional
+    public Party createParty(Party party) {
 
-        Party party = Party.builder()
-                .partyName(partyName)
-                .creationDate(new Date())
-                .partyLeaderId(partyLeader.getUserId())
+        Party newParty = Party.builder()
+                .partyName(party.getPartyName())
+                .partyLeaderId(party.getPartyLeaderId())
                 .build();
 
+        partyRepository.save(newParty);
         // 사용자를 추가
-        party.getMembers().add(partyLeader);
+        inviteUserToParty(newParty.getPartyId(), party.getPartyLeaderId());
 
-        return partyRepository.save(party);
+        return partyRepository.save(newParty);
     }
 
     @Override
+    @Transactional
     public void inviteUserToParty(Long partyId, Long userId) {
         // 파티 엔티티를 찾기
         Party party = partyRepository.findById(partyId)

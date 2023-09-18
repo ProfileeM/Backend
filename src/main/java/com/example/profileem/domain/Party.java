@@ -1,16 +1,13 @@
 package com.example.profileem.domain;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Setter //setter 메소드 생성
 @Getter //getter 메소드 생성
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "party")
@@ -43,6 +40,7 @@ public class Party {
     private List<Card> cards;
 
     // 파티에 속한 유저들 (유저들 권한 관리 여기에 있는 유저만 이 모임의 카드를 볼 수 있음)
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "party_members",
@@ -50,5 +48,15 @@ public class Party {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private Set<User> members;
+
+    @Builder
+    public Party(String partyName, Long partyLeaderId) {
+        this.partyName = partyName;
+        this.partyLeaderId = partyLeaderId;
+        this.creationDate = new Date();
+        this.cardCount = 0;
+        this.members = new HashSet<>();
+        this.cards = new ArrayList<>();
+    }
 
 }

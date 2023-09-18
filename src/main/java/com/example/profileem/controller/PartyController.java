@@ -23,22 +23,21 @@ public class PartyController {
     // 내가 방장인 파티 생성
     // 파티 생성
     @PostMapping("/")
-    public ResponseEntity<Party> createParty(
-            @RequestParam("party_name") String partyName,
-            @RequestParam("party_leader_id") Long partyLeaderId) {
+    public ResponseEntity<Party> createParty(@RequestBody Party party) {
+
         try {
-            Party party = partyService.createParty(partyName, partyLeaderId);
-            return ResponseEntity.ok(party);
+            Party newParty = partyService.createParty(party);
+            return new ResponseEntity<>(newParty, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
     // 사용자를 파티에 초대
-    @PostMapping("/{partyId}/invitation")
+    @PostMapping("/invitation/{party_id}")
     public ResponseEntity<String> inviteUserToParty(
-            @PathVariable("partyId") Long partyId,
-            @RequestParam("userId") Long userId) {
+            @PathVariable("party_id") Long partyId,
+            @RequestParam("user_id") Long userId) {
         try {
             partyService.inviteUserToParty(partyId, userId);
             return ResponseEntity.ok("User invited to the party.");
@@ -49,14 +48,12 @@ public class PartyController {
         }
     }
 
-    // 파티 탈퇴
-
 
     // 파티에 카드 등록
-    @PostMapping("/{partyId}/card")
+    @PostMapping("/card/{party_id}")
     public ResponseEntity<String> addCardToParty(
-            @PathVariable("partyId") Long partyId,
-            @RequestParam("cardId") Long cardId) {
+            @PathVariable("party_id") Long partyId,
+            @RequestParam("card_id") Long cardId) {
         try {
             partyService.addCardToParty(partyId, cardId);
             return ResponseEntity.ok("Card added to the party");
@@ -66,11 +63,11 @@ public class PartyController {
     }
 
     // 파티에 등록했던 카드 교체
-    @PutMapping("/{partyId}/card")
+    @PutMapping("/card/{party_id}")
     public ResponseEntity<String> replacePartyCard(
-            @PathVariable("partyId") Long partyId,
-            @RequestParam("oldCardId") Long oldCardId,
-            @RequestParam("newCardId") Long newCardId) {
+            @PathVariable("party_id") Long partyId,
+            @RequestParam("old_card_id") Long oldCardId,
+            @RequestParam("new_card_id") Long newCardId) {
         try {
             partyService.replacePartyCard(partyId, oldCardId, newCardId);
             return ResponseEntity.ok("Party card replaced successfully");
