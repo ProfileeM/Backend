@@ -6,11 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import io.swagger.v3.oas.annotations.*;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 
+@Tag(name="Party")
 @RestController
 @RequestMapping("/party")
+//@Api(tags = {"Party"})
 public class PartyController {
 
     private final PartyService partyService;
@@ -21,7 +24,7 @@ public class PartyController {
     }
 
     // 내가 방장인 파티 생성
-    // 파티 생성
+    @Operation(summary = "(내가 방장인 파티) 파티 생성", description = "(내가 방장인 파티) 파티 생성")
     @PostMapping("/")
     public ResponseEntity<Party> createParty(
             @RequestParam("party_name") String partyName,
@@ -35,6 +38,7 @@ public class PartyController {
     }
 
     // 사용자를 파티에 초대
+    @Operation(summary = "파티에 사용자 초대", description = "파티에 사용자 초대")
     @PostMapping("/{partyId}/invitation")
     public ResponseEntity<String> inviteUserToParty(
             @PathVariable("partyId") Long partyId,
@@ -53,6 +57,7 @@ public class PartyController {
 
 
     // 파티에 카드 등록
+    @Operation(summary = "파티에 카드 등록", description = "파티에 카드 등록")
     @PostMapping("/{partyId}/card")
     public ResponseEntity<String> addCardToParty(
             @PathVariable("partyId") Long partyId,
@@ -66,6 +71,7 @@ public class PartyController {
     }
 
     // 파티에 등록했던 카드 교체
+    @Operation(summary = "파티에 등록했던 카드 교체", description = "파티에 등록했던 카드 교체")
     @PutMapping("/{partyId}/card")
     public ResponseEntity<String> replacePartyCard(
             @PathVariable("partyId") Long partyId,
@@ -80,6 +86,7 @@ public class PartyController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
 
 
 

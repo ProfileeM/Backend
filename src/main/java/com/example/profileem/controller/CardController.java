@@ -2,6 +2,8 @@ package com.example.profileem.controller;
 
 import com.example.profileem.domain.Card;
 import com.example.profileem.repository.CardRepository;
+import io.swagger.v3.oas.annotations.*;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+
+@Tag(name = "Card")
 @RestController
 @RequestMapping("/card")
 public class CardController {
@@ -21,21 +25,22 @@ public class CardController {
         this.cardRepository = cardRepository;
     }
 
-    @PostMapping("/") // 내 프로필 카드 등록
+    @Operation(summary = "내 프로필 카드 등록", description = "내 프로필 카드 등록")
+    @PostMapping("/")
     public ResponseEntity<Card> createCard(@RequestBody Card card) {
-
-        // 나머지 카드 정보 설정하고 저장
         Card savedCard = cardRepository.save(card);
         return new ResponseEntity<>(savedCard, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{userId}") // 내 프로필 카드 전체 조회
+    @Operation(summary = "내 프로필 카드 전체 조회", description = "내 프로필 카드 전체 조회")
+    @GetMapping("/{userId}")
     public ResponseEntity<List<Card>> getCardsByUserId(@PathVariable Long userId) {
         List<Card> cards = cardRepository.findByUserUserId(userId);
         return new ResponseEntity<>(cards, HttpStatus.OK);
     }
 
-    @GetMapping("/{userId}/{cardId}") // 내 프로필 카드 특정 조회
+    @Operation(summary = "내 프로필 카드 특정 조회", description = "내 프로필 카드 특정 조회")
+    @GetMapping("/{userId}/{cardId}")
     public ResponseEntity<Card> getCardByUserIdAndCardId(
             @PathVariable Long userId,
             @PathVariable Long cardId) {
@@ -45,7 +50,8 @@ public class CardController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @DeleteMapping("/{userId}/{cardId}") // 내 프로필 카드 특정 삭제
+    @Operation(summary = "내 프로필 카드 특정 삭제", description = "내 프로필 카드 특정 삭제")
+    @DeleteMapping("/{userId}/{cardId}")
     public ResponseEntity<String> deleteCardByUserIdAndCardId(
             @PathVariable Long userId,
             @PathVariable Long cardId) {
@@ -58,8 +64,8 @@ public class CardController {
         }
     }
 
-
-    @PutMapping("/{userId}/{cardId}") // 내 프로필 카드 수정
+    @Operation(summary = "내 프로필 카드 수정", description = "내 프로필 카드 수정")
+    @PutMapping("/{userId}/{cardId}")
     public ResponseEntity<String> updateCardByUserIdAndCardId(
             @PathVariable Long userId, @PathVariable Long cardId,
             @RequestBody Card updatedCard) {

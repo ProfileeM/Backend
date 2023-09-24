@@ -8,8 +8,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import io.swagger.v3.oas.annotations.*;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import java.util.List;
 
+@Tag(name = "User")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -22,6 +26,7 @@ public class UserController {
     }
 
     // 사용자가 받은 개인 프로필 카드 ID 추가
+    @Operation(summary = "사용자가 받은 개인 프로필 카드 ID 추가", description = "사용자가 받은 개인 프로필 카드 ID 추가")
     @PostMapping("/{user_id}/card")
     public ResponseEntity<String> addReceivedCardId(
             @PathVariable("user_id") Long userId,
@@ -35,6 +40,7 @@ public class UserController {
     }
 
     // 사용자가 받은 개인 프로필 카드 ID 목록 조희
+    @Operation(summary = "사용자가 받은 개인 프로필 카드 ID 목록 조희", description = "사용자가 받은 개인 프로필 카드 ID 목록 조희")
     @GetMapping("/{user_id}/cards")
     public ResponseEntity<List<Long>> getReceivedCardIds(@PathVariable("user_id") Long userId) {
         try {
@@ -46,6 +52,7 @@ public class UserController {
     }
 
     // 사용자가 받은 개인 프로필 카드 삭제
+    @Operation(summary = "사용자가 받은 개인 프로필 카드 삭제", description = "사용자가 받은 개인 프로필 카드 삭제")
     @DeleteMapping("/{user_id}/{card_id}")
     public ResponseEntity<String> deleteReceivedCard(
             @PathVariable("user_id") Long userId,
@@ -59,6 +66,7 @@ public class UserController {
     }
 
     // 사용자가 속한 파티 목록 조회
+    @Operation(summary = "사용자가 속한 파티 목록 조회", description = "사용자가 속한 파티 목록 조회")
     @GetMapping("/{userId}/parties")
     public ResponseEntity<List<Long>> getUserPartyIds(@PathVariable("userId") Long userId) {
         try {
