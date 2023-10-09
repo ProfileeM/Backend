@@ -1,10 +1,7 @@
 package com.example.profileem.domain;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,13 +9,18 @@ import java.util.List;
 @Entity
 @Setter
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "user")
+@Table(name = "user") // 테이블 이름 오류
 public class User {
 
     @Id
     @Column(name="user_id")
     private Long userId;
+
+    @Column(name = "email", nullable = false)
+    private String email;
 
     @Column(name="name", nullable = false)
     private String name;

@@ -1,25 +1,27 @@
 package com.example.profileem.controller;
 
-import com.example.profileem.domain.Party;
-import com.example.profileem.repository.UserRepository;
+import com.example.profileem.domain.dto.LoginResponse;
+import com.example.profileem.service.OAuthService;
 import com.example.profileem.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
+    private final OAuthService oAuthService;
 
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
+    // 카카오 로그인
+    @PostMapping("/kakao")
+    public LoginResponse loginKakao(@RequestParam("code") String authorizationCode) {
+        return oAuthService.loginKakao(authorizationCode);
     }
 
     // 사용자가 받은 개인 프로필 카드 ID 추가
