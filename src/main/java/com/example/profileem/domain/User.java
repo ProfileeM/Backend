@@ -38,6 +38,11 @@ public class User {
     @ManyToMany(mappedBy = "members")
     private List<Party> parties;
 
+
+//    // 관리자 인지 일반 유저인지
+//    @Column(name="role")
+//    private String role;
+
     @Builder
     public User(Long userId, String name) {
         this.userId = userId;
