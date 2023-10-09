@@ -55,7 +55,7 @@ public class NoticeController {
     }
 
     // 공지사항 삭제 (관리자만 하도록 수정해야함)
-    @Operation(summary = "공지사항 수정", description = "공지사항 수정")
+    @Operation(summary = "공지사항 삭제", description = "공지사항 삭제")
     @DeleteMapping("/{notice_id}")
     public ResponseEntity<String> deleteNotice(@PathVariable Long notice_id) {
         noticeService.deleteNotice(notice_id);
