@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
+import java.util.Optional;
 
 @Tag(name = "User")
 @RestController
@@ -28,9 +29,10 @@ public class UserController {
     // 사용자가 받은 개인 프로필 카드 ID 추가
     @Operation(summary = "사용자가 받은 개인 프로필 카드 ID 추가", description = "사용자가 받은 개인 프로필 카드 ID 추가")
     @PostMapping("/{user_id}/card")
+
     public ResponseEntity<String> addReceivedCardId(
-            @PathVariable("user_id") Long userId,
-            @RequestParam("card_id") Long cardId) {
+            @RequestParam("user_id") Long userId,
+            @PathVariable("card_id") Long cardId) {
         try {
             userService.addReceivedCardId(userId, cardId);
             return ResponseEntity.ok("Card added to user's received cards");
@@ -54,8 +56,9 @@ public class UserController {
     // 사용자가 받은 개인 프로필 카드 삭제
     @Operation(summary = "사용자가 받은 개인 프로필 카드 삭제", description = "사용자가 받은 개인 프로필 카드 삭제")
     @DeleteMapping("/{user_id}/{card_id}")
+
     public ResponseEntity<String> deleteReceivedCard(
-            @PathVariable("user_id") Long userId,
+            @RequestParam("user_id") Long userId,
             @PathVariable("card_id") Long cardId) {
         try {
             userService.deleteReceivedCard(userId, cardId);
@@ -74,6 +77,20 @@ public class UserController {
             return ResponseEntity.ok(userPartyIds);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    // 파티에서 탈퇴
+    @Operation(summary = "내 그룹에서 파티 삭제", description = "내 그룹에서 파티 삭제(파티에서 탈퇴)")
+    @DeleteMapping("/party/{party_id}") // 내 그룹에서 파티 삭제
+    public ResponseEntity<String> deletePartyInUserGroup(
+            @RequestParam("user_id") Long userId,
+            @PathVariable("party_id") Long partyId ) {
+        try {
+            userService.deletePartyInUserGroup(userId, partyId);
+            return ResponseEntity.ok("Party deleted successfully");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User or party not found");
         }
     }
 }

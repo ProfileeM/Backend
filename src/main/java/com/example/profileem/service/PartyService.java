@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface PartyService {
 
-    Party createParty(String partyName, Long partyLeaderId);
+    Party createParty(Party party);
 
     void inviteUserToParty(Long partyId, Long userId);
 
