@@ -10,13 +10,13 @@ import java.util.Date;
 public class JwtAuthenticationProvider {
 
     @Value("${jwt.secret}")
-    private static String secretKey;
+    private String secretKey;
 
     @Value("${jwt.access-token-time}")
-    private static long access_token_time;
+    private long access_token_time;
 
     @Value("${jwt.refresh-token-time}")
-    private static long refresh_token_time;
+    private long refresh_token_time;
 
 
     // Access Token 생성
@@ -29,7 +29,7 @@ public class JwtAuthenticationProvider {
         return createToken(userId, name, "Refresh", refresh_token_time);
     }
 
-    public static String createToken(Long userId, String name,
+    public String createToken(Long userId, String name,
                                      String type, Long tokenValidTime) {
         return Jwts.builder()
                 .setHeaderParam("type", type) // Header 구성

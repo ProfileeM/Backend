@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "<user>") // 테이블 이름 오류
+@Table(name = "user") // 테이블 이름 오류
 public class User {
 
     @Id
