@@ -2,6 +2,8 @@ package com.example.profileem.controller;
 
 import com.example.profileem.domain.Party;
 import com.example.profileem.service.PartyService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Party")
 @RestController
 @RequestMapping("/party")
 public class PartyController {
@@ -23,6 +26,7 @@ public class PartyController {
     // 내가 방장인 파티 생성
     // 파티 생성
     @PostMapping("/")
+    @Operation(summary = "(내가 방장인 파티) 파티 생성", description = "(내가 방장인 파티) 파티 생성")
     public ResponseEntity<Party> createParty(@RequestBody Party party) {
 
         try {
@@ -34,6 +38,7 @@ public class PartyController {
     }
 
     // 사용자를 파티에 초대
+    @Operation(summary = "파티에 사용자 초대", description = "파티에 사용자 초대")
     @PostMapping("/invitation/{party_id}")
     public ResponseEntity<String> inviteUserToParty(
             @PathVariable("party_id") Long partyId,
@@ -50,6 +55,7 @@ public class PartyController {
 
 
     // 파티에 카드 등록
+    @Operation(summary = "파티에 카드 등록", description = "파티에 카드 등록")
     @PostMapping("/card/{party_id}")
     public ResponseEntity<String> addCardToParty(
             @PathVariable("party_id") Long partyId,
@@ -63,6 +69,7 @@ public class PartyController {
     }
 
     // 파티에 등록했던 카드 교체
+    @Operation(summary = "파티에 등록했던 카드 교체", description = "파티에 등록했던 카드 교체")
     @PutMapping("/card/{party_id}")
     public ResponseEntity<String> replacePartyCard(
             @PathVariable("party_id") Long partyId,
