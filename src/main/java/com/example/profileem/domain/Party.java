@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.*;
 
+//test -> good
 @Setter //setter 메소드 생성
 @Getter //getter 메소드 생성
 @NoArgsConstructor
