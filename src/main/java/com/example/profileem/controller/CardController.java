@@ -27,7 +27,7 @@ public class CardController {
     private final CardRepository cardRepository;
     private final CardServiceImpl cardService;
 
-
+    @Operation(summary = "내 프로필 카드 등록", description = "내 프로필 카드 등록")
     @PostMapping("/register") // 내 프로필 카드 등록 -- 수정해야 될 내용 : 등록할 때 카카오 로그인 userid를 Card의 userid로 넘겨줘야함
     public ResponseEntity<String> createCard(@RequestBody CardRequestDto cardRequestDto) {
 

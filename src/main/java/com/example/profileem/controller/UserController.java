@@ -23,6 +23,7 @@ public class UserController {
     private final OAuthService oAuthService;
 
     // 카카오 로그인
+    @Operation(summary = "카카오 로그인", description = "카카오 로그인 인가코드로 넘겨주기")
     @PostMapping("/kakao")
     public LoginResponse loginKakao(@RequestParam("code") String authorizationCode) {
         return oAuthService.loginKakao(authorizationCode);
