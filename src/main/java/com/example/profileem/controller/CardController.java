@@ -1,10 +1,16 @@
 package com.example.profileem.controller;
 
 import com.example.profileem.domain.Card;
+import com.example.profileem.domain.dto.CardRequestDto;
 import com.example.profileem.repository.CardRepository;
+import com.example.profileem.service.CardService;
+import com.example.profileem.service.CardServiceImpl;
+import lombok.RequiredArgsConstructor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,23 +18,23 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Tag(name = "Card")
 @RestController
 @RequestMapping("/card")
 public class CardController {
 
     private final CardRepository cardRepository;
+    private final CardServiceImpl cardService;
 
-    @Autowired
-    public CardController(CardRepository cardRepository) {
-        this.cardRepository = cardRepository;
-    }
 
-    @Operation(summary = "내 프로필 카드 등록", description = "내 프로필 카드 등록")
-    @PostMapping("/")
-    public ResponseEntity<Card> createCard(@RequestBody Card card) {
-        Card savedCard = cardRepository.save(card);
-        return new ResponseEntity<>(savedCard, HttpStatus.CREATED);
+    @PostMapping("/register") // 내 프로필 카드 등록 -- 수정해야 될 내용 : 등록할 때 카카오 로그인 userid를 Card의 userid로 넘겨줘야함
+    public ResponseEntity<String> createCard(@RequestBody CardRequestDto cardRequestDto) {
+
+        // 나머지 카드 정보 설정하고 저장
+//        Card savedCard = cardRepository.save(card);
+        return new ResponseEntity<>(cardService.createCard(cardRequestDto), HttpStatus.CREATED);
+
     }
 
     @Operation(summary = "내 프로필 카드 전체 조회", description = "내 프로필 카드 전체 조회")
@@ -73,8 +79,6 @@ public class CardController {
 
             if (updatedCard.getNickname() != null) card.setNickname(updatedCard.getNickname());
 
-            if (updatedCard.getUniversity() != null) card.setUniversity(updatedCard.getUniversity());
-
             if (updatedCard.getMajor() != null) card.setMajor(updatedCard.getMajor());
 
             if (updatedCard.getResidence() != null) card.setResidence(updatedCard.getResidence());
@@ -83,11 +87,7 @@ public class CardController {
 
             if (updatedCard.getProfile() != null) card.setProfile(updatedCard.getProfile());
 
-            if (updatedCard.getTemplate() != null) card.setTemplate(updatedCard.getTemplate());
-
             if (updatedCard.getMbti() != null) card.setMbti(updatedCard.getMbti());
-
-            if (updatedCard.getMusic() != null) card.setMusic(updatedCard.getMusic());
 
             if (updatedCard.getDrink() != null) card.setDrink(updatedCard.getDrink());
 

@@ -30,7 +30,7 @@ public class JwtAuthenticationProvider {
     }
 
     public String createToken(Long userId, String name,
-                                     String type, Long tokenValidTime) {
+                              String type, Long tokenValidTime) {
         return Jwts.builder()
                 .setHeaderParam("type", type) // Header 구성
                 .setClaims(createClaims(userId, name)) // Payload - Claims 구성
