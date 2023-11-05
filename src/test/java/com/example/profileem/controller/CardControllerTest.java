@@ -20,7 +20,7 @@ class CardControllerTest {
     @Autowired
     protected MockMvc mockMvc;
 
-    @Autowired
+    @Autowired // 테스트
     protected ObjectMapper objectMapper; // 직렬화, 역직렬화
 
     @Autowired
