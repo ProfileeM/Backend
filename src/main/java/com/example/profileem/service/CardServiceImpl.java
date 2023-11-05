@@ -1,8 +1,11 @@
 package com.example.profileem.service;
 
 import com.example.profileem.domain.Card;
+import com.example.profileem.domain.User;
 import com.example.profileem.domain.dto.CardRequestDto;
+import com.example.profileem.jwt.JwtAuthenticationProvider;
 import com.example.profileem.repository.CardRepository;
+import com.example.profileem.repository.UserRepository;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
@@ -28,10 +31,16 @@ import java.util.Map;
 public class CardServiceImpl implements CardService {
 
     private final CardRepository cardRepository;
+    private final UserRepository userRepository;
+    private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
     @Override
     public String createCard(CardRequestDto cardRequestDto) {
-        Card card = cardRequestDto.toEntity();
+        Long userId = jwtAuthenticationProvider.getUserId();
+
+        User user = userRepository.findByUserId(userId);
+
+        Card card = cardRequestDto.toEntity(user);
         // 카드 생성 및 qr 생성 로직
 
         // 앱 실행하게 하는 건 프론트 조금 나오면 추가

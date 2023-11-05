@@ -1,6 +1,7 @@
 package com.example.profileem.domain.dto;
 
 import com.example.profileem.domain.Card;
+import com.example.profileem.domain.User;
 import lombok.*;
 
 @Getter
@@ -21,7 +22,7 @@ public class CardRequestDto {
     private String profile;
     private int template;
 
-    public Card toEntity() {
+    public Card toEntity(User user) {
         return Card.builder()
                 .nickname(name)
                 .introduce(introduce)
@@ -34,6 +35,7 @@ public class CardRequestDto {
                 .interest(interest)
                 .profile(profile)
                 .template(template)
+                .user(user)
                 .build();
     }
 }
