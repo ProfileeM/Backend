@@ -1,6 +1,7 @@
 package com.example.profileem.service;
 
 import com.example.profileem.domain.Card;
+import com.example.profileem.domain.dto.CardRequestDto;
 import com.example.profileem.repository.CardRepository;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -9,6 +10,7 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,17 +23,15 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @Service
-public class CardServiceImpl implements CardService{
+public class CardServiceImpl implements CardService {
+
     private final CardRepository cardRepository;
 
-    @Autowired // 생성자 주입
-    public CardServiceImpl(CardRepository cardRepository) {
-        this.cardRepository = cardRepository;
-    }
-
     @Override
-    public Card createCard(Card card) {
+    public String createCard(CardRequestDto cardRequestDto) {
+        Card card = cardRequestDto.toEntity();
         // 카드 생성 및 qr 생성 로직
 
         // 앱 실행하게 하는 건 프론트 조금 나오면 추가
@@ -41,7 +41,9 @@ public class CardServiceImpl implements CardService{
         String qrCodeBase64 = generateQRCodeBase64(Url);
         card.setQr(qrCodeBase64);
 
-        return cardRepository.save(card);
+        cardRepository.save(card);
+
+        return "카드 생성 완료";
     }
 
     // QR 코드 생성 로직 구현 (생성된 QR 코드를 Base64로 변환)

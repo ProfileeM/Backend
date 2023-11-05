@@ -1,8 +1,11 @@
 package com.example.profileem.controller;
 
 import com.example.profileem.domain.Card;
+import com.example.profileem.domain.dto.CardRequestDto;
 import com.example.profileem.repository.CardRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.profileem.service.CardService;
+import com.example.profileem.service.CardServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,23 +13,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/card")
 public class CardController {
 
     private final CardRepository cardRepository;
+    private final CardServiceImpl cardService;
 
-    @Autowired
-    public CardController(CardRepository cardRepository) {
-        this.cardRepository = cardRepository;
-    }
-
-    @PostMapping("/") // 내 프로필 카드 등록 -- 수정해야 될 내용 : 등록할 때 카카오 로그인 userid를 Card의 userid로 넘겨줘야함
-    public ResponseEntity<Card> createCard(@RequestBody Card card) {
+    @PostMapping("/register") // 내 프로필 카드 등록 -- 수정해야 될 내용 : 등록할 때 카카오 로그인 userid를 Card의 userid로 넘겨줘야함
+    public ResponseEntity<String> createCard(@RequestBody CardRequestDto cardRequestDto) {
 
         // 나머지 카드 정보 설정하고 저장
-        Card savedCard = cardRepository.save(card);
-        return new ResponseEntity<>(savedCard, HttpStatus.CREATED);
+//        Card savedCard = cardRepository.save(card);
+        return new ResponseEntity<>(cardService.createCard(cardRequestDto), HttpStatus.CREATED);
     }
 
     @GetMapping("/{userId}") // 내 프로필 카드 전체 조회

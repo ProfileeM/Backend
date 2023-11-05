@@ -1,13 +1,17 @@
 package com.example.profileem.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 //엔티티 생성후 확인
 @Setter //setter 메소드 생성
 @Getter //getter 메소드 생성 // 기본 생성자
+@Builder
 @AllArgsConstructor
 @Entity(name="card") //테이블 명 : card
 public class Card {
@@ -29,8 +33,8 @@ public class Card {
     @Column(name="nickname")//
     private String nickname; //nickname
 
-    @Column(name="university")
-    private String university; //university
+    @Column(name="introduce")
+    private String introduce; //introduce
 
     @Column(name="major")
     private String major; //major
@@ -45,13 +49,10 @@ public class Card {
     private String profile; //profile_url
 
     @Column(name="template")
-    private String template; //template_url
+    private int template; //template_url
 
     @Column(name="mbti")
     private String mbti;
-
-    @Column(name="music")
-    private String music;
 
     @Column(name="drink")
     private String drink;
@@ -61,15 +62,20 @@ public class Card {
 
     @Column(name="birth")
     private String birth;
+
+    @Column(name = "interest")
+    private String interest;
+
     public Card(){
 
     }
-    public Card(String nickname, String university, String major, String residence,
-                String qr, String template, String profile,
+    public Card(String nickname, String introduce, String major, String residence,
+                String qr, int template, String profile,
                 User user,
-                String mbti, String drink, String music, String bad_food, String birth) {
+                String mbti, String drink, String bad_food, String birth,
+                String interest) {
         this.nickname = nickname;
-        this.university = university;
+        this.introduce = introduce;
         this.major = major;
         this.residence = residence;
 
@@ -82,9 +88,8 @@ public class Card {
 
         this.mbti = mbti;
         this.bad_food = bad_food;
-        this.music=music;
         this.birth=birth;
         this.drink=drink;
-
+        this.interest = interest;
     }
 }
