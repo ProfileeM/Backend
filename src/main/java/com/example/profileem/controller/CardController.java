@@ -3,8 +3,12 @@ package com.example.profileem.controller;
 import com.example.profileem.domain.Card;
 import com.example.profileem.domain.dto.CardRequestDto;
 import com.example.profileem.repository.CardRepository;
+import com.example.profileem.service.CardService;
 import com.example.profileem.service.CardServiceImpl;
 import lombok.RequiredArgsConstructor;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
@@ -23,7 +27,7 @@ public class CardController {
     private final CardRepository cardRepository;
     private final CardServiceImpl cardService;
 
-    @Operation(summary = "내 프로필 카드 등록", description = "내 프로필 카드 등록")
+
     @PostMapping("/register") // 내 프로필 카드 등록 -- 수정해야 될 내용 : 등록할 때 카카오 로그인 userid를 Card의 userid로 넘겨줘야함
     public ResponseEntity<String> createCard(@RequestBody CardRequestDto cardRequestDto) {
 
