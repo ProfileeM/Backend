@@ -1,8 +1,11 @@
 package com.example.profileem.jwt;
 
 import io.jsonwebtoken.*;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Date;
 
@@ -47,22 +50,18 @@ public class JwtAuthenticationProvider {
         return claims;
     }
 
-    public String getPayload(String token) {
-        try {
-            return Jwts.parser()
-                    .setSigningKey(secretKey)
-                    .parseClaimsJws(token)
-                    .getBody()
-                    .getSubject();
-        } catch (ExpiredJwtException e) {
-            return e.getClaims().getSubject();
-        } catch (JwtException e) {
-            throw new RuntimeException("유효하지 않은 토큰입니다.");
-        }
+    public Long getUserId() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        String accessToken = request.getHeader("Authorization").split(" ")[1].trim();
+        String id = getId(accessToken);
+        return Long.parseLong(id);
     }
 
-    public boolean validateToken(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)
-                .getBody().getExpiration().before(new Date());
+    public String getId(String accessToken) {
+        return Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(accessToken)
+                .getBody()
+                .getSubject();
     }
 }
