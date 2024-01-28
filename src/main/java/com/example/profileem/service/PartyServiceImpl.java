@@ -7,11 +7,20 @@ import com.example.profileem.repository.CardRepository;
 import com.example.profileem.repository.PartyRepository;
 import com.example.profileem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.time.Duration;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PartyServiceImpl implements PartyService {
@@ -19,12 +28,43 @@ public class PartyServiceImpl implements PartyService {
     private final PartyRepository partyRepository;
     private final UserRepository userRepository;
     private final CardRepository cardRepository;
+    private final RedisTemplate<String, Object> redisTemplate;
+
 
     @Autowired
-    public PartyServiceImpl(PartyRepository partyRepository, UserRepository userRepository, CardRepository cardRepository) {
+    public PartyServiceImpl(PartyRepository partyRepository, UserRepository userRepository, CardRepository cardRepository, RedisTemplate<String, Object> redisTemplate) {
         this.partyRepository = partyRepository;
         this.userRepository = userRepository;
         this.cardRepository = cardRepository;
+        this.redisTemplate = redisTemplate;
+    }
+
+    // Redis 캐시 업데이트
+    private void updateRedisCache(Party party) {
+        redisTemplate.opsForValue().set(getPartyCacheKey(party.getPartyId()), party);
+        redisTemplate.expire(getPartyCacheKey(party.getPartyId()), Duration.ofMinutes(party.getCardCount() + 1));
+    }
+
+    // Redis 캐시 삭제
+    public void deleteFromRedisCache(Long partyId) {
+        redisTemplate.delete(getPartyCacheKey(partyId));
+    }
+
+    private String getPartyCacheKey(Long partyId) {
+        return "Party::" + partyId;
+    }
+
+    // 비동기 메소드로 Redis 캐시 업데이트
+    @Async
+    public void updateRedisCacheAsync(Long partyId) {
+        Optional<Party> party = getPartyByPartyId(partyId);
+        party.ifPresent(value -> updateRedisCache(value));
+    }
+
+    // 비동기 메소드로 Redis 캐시 삭제
+    @Async
+    public void deleteFromRedisCacheAsync(Long partyId) {
+        deleteFromRedisCache(partyId);
     }
 
     @Override
@@ -77,6 +117,8 @@ public class PartyServiceImpl implements PartyService {
 
         // 변경 내용 저장
         partyRepository.save(party);
+
+        updateRedisCacheAsync(party.getPartyId());
     }
 
     @Override
@@ -97,5 +139,32 @@ public class PartyServiceImpl implements PartyService {
         party.getCards().add(newCard);
 
         partyRepository.save(party);
+
+        updateRedisCacheAsync(party.getPartyId());
     }
+
+    @Override
+    public Optional<Party> getPartyByPartyId(Long party_id) {
+        String key = "Party::" + party_id;
+        ValueOperations<String, Object> valueOps = redisTemplate.opsForValue();
+
+        // Redis에서 데이터 조회
+        Optional<Party> party = Optional.ofNullable((Party) valueOps.get(key));
+
+        if (!party.isPresent()) {
+            // Redis에 데이터가 없으면 MySQL에서 조회
+            party = partyRepository.findByPartyId(party_id);
+
+            if (party.isPresent()) {
+                // MySQL에서 조회한 데이터를 Redis에 저장하고 만료 시간 설정 (예: 1시간)
+                valueOps.set(key, party.get());
+                redisTemplate.expire(key, Duration.ofMinutes(party.get().getCardCount() + 1));
+            } else {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Party not found");
+            }
+        }
+        return party;
+    }
+
+
 }

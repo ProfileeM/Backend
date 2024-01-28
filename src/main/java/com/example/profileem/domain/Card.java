@@ -3,6 +3,7 @@ package com.example.profileem.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 //엔티티 생성후 확인

@@ -3,7 +3,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.redis.core.RedisHash;
 
+import java.io.Serializable;
 import java.util.*;
 
 //test -> good
@@ -12,7 +14,7 @@ import java.util.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "party")
-public class Party {
+public class Party implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -40,6 +40,7 @@ public class NoticeController {
         List<Notice> notices = noticeService.getAllNotices();
         return ResponseEntity.status(HttpStatus.OK).body(notices);
     }
+
     // 공지사항 하나 조회
     @Operation(summary = "공지사항 하나 조회", description = "공지사항 하나 조회")
     @GetMapping("/{notice_id}")
@@ -63,7 +64,4 @@ public class NoticeController {
         noticeService.deleteNotice(notice_id);
         return ResponseEntity.noContent().build();
     }
-
-
-
 }

@@ -1,15 +1,18 @@
 package com.example.profileem.controller;
 
 import com.example.profileem.domain.Party;
+import com.example.profileem.repository.PartyRepository;
 import com.example.profileem.service.PartyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
+import java.util.Optional;
 
 @Tag(name = "Party")
 @RestController
@@ -21,6 +24,15 @@ public class PartyController {
     @Autowired
     public PartyController(PartyService partyService) {
         this.partyService = partyService;
+    }
+
+    // 파티 조회
+    @GetMapping("/{party_id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Optional<Party> getPartyByPartyId(
+            @PathVariable Long party_id
+    ) {
+        return partyService.getPartyByPartyId(party_id);
     }
 
     // 내가 방장인 파티 생성
@@ -84,6 +96,7 @@ public class PartyController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
 
 
 

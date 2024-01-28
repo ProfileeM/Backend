@@ -17,11 +17,13 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final PartyRepository partyRepository;
+    private final PartyService partyService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PartyRepository partyRepository) {
+    public UserServiceImpl(UserRepository userRepository, PartyRepository partyRepository, PartyService partyService) {
             this.userRepository = userRepository;
             this.partyRepository = partyRepository;
+            this.partyService = partyService;
     }
 
     // 사용자가 받은 카드 ID 추가
@@ -110,8 +112,10 @@ public class UserServiceImpl implements UserService{
         // 모든 멤버가 삭제되었으면 파티 삭제
         if (party.getMembers().isEmpty()) {
             partyRepository.delete(party);
+            partyService.deleteFromRedisCacheAsync(party.getPartyId());
         } else {
             partyRepository.save(party);
+            partyService.updateRedisCacheAsync(party.getPartyId());
         }
     }
 
